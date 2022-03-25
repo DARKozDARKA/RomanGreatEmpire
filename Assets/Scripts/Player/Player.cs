@@ -56,4 +56,9 @@ public class Player : MonoBehaviour
     {
         _canChangeGravity = true;
     }
+
+    public void ReverseVelocity()
+    {
+        _playerMover.ReverseVelocity();
+    }
 }

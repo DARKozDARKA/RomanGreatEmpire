@@ -144,7 +144,12 @@ public class PlayerMover : MonoBehaviour
         _justStartedChangingGravity = false;
     }
 
-
+    public void ReverseVelocity()
+    {
+        _velocity *= -1;
+        if (_playerState == PlayerMoverStates.changingGravity)
+            _playerState = PlayerMoverStates.moving;
+    }
 
 
 }
