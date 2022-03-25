@@ -118,10 +118,12 @@ public class PlayerMover : MonoBehaviour
 
     public void ReverseGravity()
     {
+        _velocity.y = 0;
         _gravity *= -1f;
         _isUpsideDown = !_isUpsideDown;
         _playerState = PlayerMoverStates.changingGravity;
         StartCoroutine(SetGravityChange());
+
     }
 
     private void CheckingIfIsGrounded()
