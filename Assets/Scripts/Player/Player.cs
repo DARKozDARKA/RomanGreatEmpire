@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private PlayerRotator _playerRotator;
     private Inventory _inventory;
     private bool _canChangeGravity = true;
-    public Action<ItemData> OnItemAdd;
+    public Action<List<ItemData>> OnInventoryChange;
 
 
 
@@ -20,11 +20,13 @@ public class Player : MonoBehaviour
         _playerRotator = GetComponent<PlayerRotator>();
         _inventory = GetComponent<Inventory>();
         _playerRotator.OnGravityStopReversing += SetReverseGravityAvailible;
+        _inventory.OnItemsChange += ChangeInventory;
     }
 
     private void OnDestroy()
     {
         _playerRotator.OnGravityStopReversing -= SetReverseGravityAvailible;
+        _inventory.OnItemsChange -= ChangeInventory;
     }
 
     private void Update()
@@ -69,6 +71,21 @@ public class Player : MonoBehaviour
     public void AddNewItem(ItemData item)
     {
         _inventory.AddNewItem(item);
-        OnItemAdd?.Invoke(item);
+
+    }
+
+    private void ChangeInventory(List<ItemData> list)
+    {
+        OnInventoryChange?.Invoke(list);
+    }
+
+    public void SetInvetory(List<string> list)
+    {
+        var newList = new List<ItemData>();
+        foreach (var item in list)
+        {
+            newList.Add(StringToItemDataConverter.Instance.GetDataFromString(item));
+        }
+        _inventory.SetInventory(newList);
     }
 }

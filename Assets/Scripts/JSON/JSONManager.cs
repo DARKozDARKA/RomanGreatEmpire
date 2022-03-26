@@ -17,11 +17,21 @@ public class JSONManager : MonoBehaviour
         _saver = GetComponent<JSONSaver>();
 
         //_saver.SaveToFile(new ItemsParameters("items", new List<string>() { "Apple" }));
-        //_reader.ReadFromFile("items");
+
     }
 
-    public void AddNewItem(ItemData data)
+    public List<string> ReadFromFile()
     {
-        _saver.SaveToFile(new ItemsParameters("_fileName", new List<string>() { data.itemName }));
+        return _reader.ReadFromFile("items");
+    }
+
+    public void SetNewItems(List<ItemData> data)
+    {
+        var stringList = new List<string>();
+        foreach (var item in data)
+        {
+            stringList.Add(item.name);
+        }
+        _saver.SaveToFile(new ItemsParameters(_fileName, stringList));
     }
 }
