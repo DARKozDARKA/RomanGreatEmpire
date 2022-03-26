@@ -19,4 +19,17 @@ public class Inventory : MonoBehaviour
     {
         _items = list;
     }
+
+    public void CleanInventory()
+    {
+        _items = new List<ItemData>();
+        OnItemsChange?.Invoke(_items);
+    }
+
+    public void DeleteItem(ItemData data)
+    {
+        if (_items.Contains(data))
+            _items.Remove(data);
+        OnItemsChange?.Invoke(_items);
+    }
 }
