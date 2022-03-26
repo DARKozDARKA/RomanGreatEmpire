@@ -81,7 +81,7 @@ public class PlayerMover : MonoBehaviour
             _velocity.y = -2f;
         else if (_isUpsideDown && IsGrounded && _velocity.y > 0f)
             _velocity.y = 2f;
- 
+
         Vector2 direction = GetInputAxis;
         float x = direction.x;
         float z = direction.y;
