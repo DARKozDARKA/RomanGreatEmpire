@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9dac8703f2cc954fa338e9a24005141, type: 3}
+  m_Name: GravityChanger
+  m_EditorClassIdentifier: 
+  image: {fileID: 21300000, guid: 1a6412f030377f544a509ae0fd5d7aac, type: 3}
+  model: {fileID: 8132424450943621811, guid: 30c425717194f62499fff9d13ed9e143, type: 3}
+  itemName: GravityChanger
