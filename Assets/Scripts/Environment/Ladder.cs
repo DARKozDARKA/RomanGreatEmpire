@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour
 {
+    private Player _currentPlayer;
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<Player>();
-        player.StartClimbingLadder();
+        _currentPlayer = other.GetComponent<Player>();
+    }
+
+    private void Update()
+    {
+        if(_currentPlayer != null)
+            _currentPlayer.StartClimbingLadder();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        var player = other.GetComponent<Player>();
-        player.StopClimbingLadder();
+        _currentPlayer = other.GetComponent<Player>();
+        _currentPlayer.StopClimbingLadder();
+        _currentPlayer = null;
     }
 }

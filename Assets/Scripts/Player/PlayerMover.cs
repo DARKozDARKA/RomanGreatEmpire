@@ -5,8 +5,6 @@ using System.Collections;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMover : MonoBehaviour
 {
-
-
     [SerializeField] private float _speed = 10f;
     [SerializeField] private float _gravity = -9.8f;
     [SerializeField] private float _jumpHeight = 3f;
@@ -21,7 +19,7 @@ public class PlayerMover : MonoBehaviour
     private bool _justStartedClimbing = false;
     private bool _isUpsideDown = false;
     private bool _justStartedChangingGravity = false;
-
+    private Camera _camera;
 
 
     public PlayerMoverStates moverState => _playerState;
@@ -29,6 +27,10 @@ public class PlayerMover : MonoBehaviour
     public bool IsGrounded => Physics.CheckSphere(_footTransform.position, _groundDistance, _groundMask);
     private Vector2 GetInputAxis => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
+    public void Init(Camera camera)
+    {
+        _camera = camera;
+    }
 
     private void Awake()
     {
@@ -62,6 +64,14 @@ public class PlayerMover : MonoBehaviour
 
         if (IsGrounded && !_justStartedClimbing)
             StopClimbingLadder();
+        else if (Input.GetButtonDown("Jump"))
+        {
+            StopClimbingLadder();
+            Vector3 cameraFor = _camera.transform.forward;
+            cameraFor.y = 0;
+            _controller.Move(cameraFor);
+        }  
+
 
     }
 
@@ -71,22 +81,20 @@ public class PlayerMover : MonoBehaviour
             _velocity.y = -2f;
         else if (_isUpsideDown && IsGrounded && _velocity.y > 0f)
             _velocity.y = 2f;
-
+ 
         Vector2 direction = GetInputAxis;
         float x = direction.x;
         float z = direction.y;
 
         Vector3 move = transform.right * x + transform.forward * z;
+        move = move.normalized;
         _controller.Move(move * _speed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity * UpsideDownMultiplier) * UpsideDownMultiplier;
         }
-
-
         ApplyGravity();
-
     }
 
     private void ApplyGravity()
@@ -130,9 +138,7 @@ public class PlayerMover : MonoBehaviour
         {
             _playerState = PlayerMoverStates.moving;
         }
-
         ApplyGravity();
-
     }
 
     private IEnumerator SetGravityChange()
@@ -148,8 +154,6 @@ public class PlayerMover : MonoBehaviour
         if (_playerState == PlayerMoverStates.changingGravity)
             _playerState = PlayerMoverStates.moving;
     }
-
-
 }
 
 public enum PlayerMoverStates

@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     public Action<List<ItemData>> OnInventoryChange;
 
 
-
     private void Awake()
     {
         _playerMover = GetComponent<PlayerMover>();
@@ -38,6 +37,7 @@ public class Player : MonoBehaviour
 
     public void Init(Camera camera)
     {
+        _playerMover.Init(camera);
         _playerRotator.Init(camera);
     }
 
