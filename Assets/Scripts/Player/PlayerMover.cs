@@ -18,8 +18,6 @@ public class PlayerMover : MonoBehaviour
     private PlayerMoverStates _playerState = PlayerMoverStates.moving;
     private CharacterController _controller;
     private Vector3 _velocity;
-    private bool _isChangingGravity = false;
-
     private bool _justStartedClimbing = false;
     private bool _isUpsideDown = false;
     private bool _justStartedChangingGravity = false;

@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[RequireComponent(typeof(PlayerMover), typeof(PlayerRotator))]
+[RequireComponent(typeof(PlayerMover), typeof(PlayerRotator), typeof(Inventory))]
 public class Player : MonoBehaviour
 {
     private PlayerMover _playerMover;
     private PlayerRotator _playerRotator;
+    private Inventory _inventory;
     private bool _canChangeGravity = true;
+    public Action<ItemData> OnItemAdd;
 
 
 
@@ -15,10 +18,11 @@ public class Player : MonoBehaviour
     {
         _playerMover = GetComponent<PlayerMover>();
         _playerRotator = GetComponent<PlayerRotator>();
+        _inventory = GetComponent<Inventory>();
         _playerRotator.OnGravityStopReversing += SetReverseGravityAvailible;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         _playerRotator.OnGravityStopReversing -= SetReverseGravityAvailible;
     }
@@ -60,5 +64,11 @@ public class Player : MonoBehaviour
     public void ReverseVelocity()
     {
         _playerMover.ReverseVelocity();
+    }
+
+    public void AddNewItem(ItemData item)
+    {
+        _inventory.AddNewItem(item);
+        OnItemAdd?.Invoke(item);
     }
 }
