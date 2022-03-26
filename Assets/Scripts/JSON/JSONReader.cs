@@ -6,16 +6,19 @@ using System.IO;
 public class JSONReader : MonoBehaviour
 {
 
-    public void ReadFromFile(string filename)
+    public List<string> ReadFromFile(string filename)
     {
         var path = GetPathWithFile(filename);
+        if (!File.Exists(path)) return null;
         var file = File.ReadAllText(path);
         ItemsParameters itemParameters = JsonUtility.FromJson<ItemsParameters>(file);
 
+        var finalList = new List<string>();
         foreach (string item in itemParameters.names)
         {
-            Debug.Log("Found employee: " + item);
+            finalList.Add(item);
         }
+        return finalList;
     }
 
 

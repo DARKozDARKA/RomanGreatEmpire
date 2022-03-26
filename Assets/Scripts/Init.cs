@@ -10,16 +10,21 @@ public class Init : MonoBehaviour
 
     private void OnEnable()
     {
-        //_player.OnItemAdd += 
+        _player.OnInventoryChange += _jsonManager.SetNewItems;
     }
 
     private void OnDisable()
     {
-
+        _player.OnInventoryChange -= _jsonManager.SetNewItems;
     }
 
     private void Start()
     {
         _player.Init(_camera);
+
+        var list = _jsonManager.ReadFromFile();
+        if (list != null)
+            _player.SetInvetory(list);
+
     }
 }
