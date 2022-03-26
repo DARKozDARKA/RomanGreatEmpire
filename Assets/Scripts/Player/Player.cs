@@ -88,4 +88,14 @@ public class Player : MonoBehaviour
         }
         _inventory.SetInventory(newList);
     }
+
+    public void CleanInventory()
+    {
+        _inventory.CleanInventory();
+    }
+
+    public void DeleteItemFromInventory(ItemData data)
+    {
+        _inventory.DeleteItem(data);
+    }
 }
