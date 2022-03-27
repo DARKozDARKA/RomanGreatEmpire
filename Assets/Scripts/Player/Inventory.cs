@@ -7,9 +7,16 @@ public class Inventory : MonoBehaviour
 {
     private List<ItemData> _items = new List<ItemData>();
     public Action<List<ItemData>> OnItemsChange;
-    public bool HasCrowbar { get; private set; } = false;
-    public bool HasGravityChanger { get; private set; } = false;
-    public bool HasKey { get; private set; } = false;
+    public bool HasCrowbar => _specialItems["Crowbar"];
+    public bool HasGravityChanger => _specialItems["GravityChanger"];
+    public bool HasKey => _specialItems["Key"];
+    private Dictionary<string, bool> _specialItems = new Dictionary<string, bool>
+    {
+        {"Crowbar", false},
+        {"GravityChanger", false},
+        {"Key", false}
+    };
+    public Dictionary<string, bool> specialItems => _specialItems;
 
     public void AddNewItem(ItemData item)
     {
@@ -53,16 +60,32 @@ public class Inventory : MonoBehaviour
 
     private void CheckOnSpecialObjects(ItemData item, bool setBool)
     {
-        if (item.name == "Crowbar")
-            HasCrowbar = setBool;
-        if (item.name == "GravityChanger")
-            HasGravityChanger = setBool;
-        if (item.name == "Key")
-            HasKey = setBool;
+        foreach (var specialItem in _specialItems.Keys)
+        {
+            if (specialItem == item.name)
+            {
+                _specialItems[specialItem] = setBool;
+                return;
+            }
+
+        }
     }
     private void SetSpecialObjectToFalse()
     {
-        HasCrowbar = false;
-        HasGravityChanger = false;
+        foreach (var item in _specialItems.Keys)
+        {
+            _specialItems[item] = false;
+        }
+    }
+}
+
+public class SpecialItem
+{
+    public readonly string name;
+    public bool exists;
+    public SpecialItem(string name, bool exists)
+    {
+        this.name = name;
+        this.exists = exists;
     }
 }
