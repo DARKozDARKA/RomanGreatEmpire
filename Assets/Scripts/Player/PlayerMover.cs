@@ -25,7 +25,20 @@ public class PlayerMover : MonoBehaviour
     public PlayerMoverStates moverState => _playerState;
     private int UpsideDownMultiplier => _isUpsideDown ? -1 : 1;
     public bool IsGrounded => Physics.CheckSphere(_footTransform.position, _groundDistance, _groundMask);
-    private Vector2 GetInputAxis => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+    private Vector2 _oldInputAxis;
+    private Vector2 _currentInputAxis = new Vector2(0, 0);
+    private Vector2 GetInputAxis()
+    {
+        _currentInputAxis = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+            _currentInputAxis.y = 0;
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+            _currentInputAxis.x = 0;
+
+        return _currentInputAxis;
+    }
+
 
     public void Init(Camera camera)
     {
@@ -56,7 +69,7 @@ public class PlayerMover : MonoBehaviour
 
     private void ClimbLadder()
     {
-        float z2 = GetInputAxis.y;
+        float z2 = GetInputAxis().y;
         if (_isUpsideDown) z2 *= -1;
         _velocity.y = _climbingLadderSpeed;
 
@@ -70,7 +83,7 @@ public class PlayerMover : MonoBehaviour
             Vector3 cameraFor = _camera.transform.forward;
             cameraFor.y = 0;
             _controller.Move(cameraFor);
-        }  
+        }
 
 
     }
@@ -82,7 +95,7 @@ public class PlayerMover : MonoBehaviour
         else if (_isUpsideDown && IsGrounded && _velocity.y > 0f)
             _velocity.y = 2f;
 
-        Vector2 direction = GetInputAxis;
+        Vector2 direction = GetInputAxis();
         float x = direction.x;
         float z = direction.y;
 
