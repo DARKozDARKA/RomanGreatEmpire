@@ -4,13 +4,13 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof(PlayerMover), typeof(PlayerRotator), typeof(Inventory))]
+[RequireComponent(typeof(PlayerInteractor))]
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _touchDistance = 3f;
-    [SerializeField] private LayerMask _planksLayer;
-    [SerializeField] private LayerMask _doorsLayer;
+
     private PlayerMover _playerMover;
     private PlayerRotator _playerRotator;
+    private PlayerInteractor _playerInteractor;
     private Inventory _inventory;
     private bool _canChangeGravity = true;
     private ItemData _currentItem;
@@ -21,13 +21,14 @@ public class Player : MonoBehaviour
     public Action OnItemAddedInWaitList;
     public Action<bool> OnWaitListChanged;
 
-
+    private bool _isUpsideDown = false;
 
     private void Awake()
     {
         _playerMover = GetComponent<PlayerMover>();
         _playerRotator = GetComponent<PlayerRotator>();
         _inventory = GetComponent<Inventory>();
+        _playerInteractor = GetComponent<PlayerInteractor>();
         _playerRotator.OnGravityStopReversing += SetReverseGravityAvailible;
         _inventory.OnItemsChange += ChangeInventory;
     }
@@ -42,59 +43,42 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F) && _inventory.HasGravityChanger)
             ReverseGravity();
+
         if (Input.GetKeyDown(KeyCode.E))
+        {
             TryAddItem();
-        DoCrowbarRaycast();
-        DoDoorRaycast();
-
-
-    }
-
-    private void DoCrowbarRaycast()
-    {
-        if (_inventory.HasCrowbar)
-        {
-            GameObject rayObject = RaycastFromCamera(_touchDistance, _planksLayer);
-            if (rayObject == null) return;
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Destroy(rayObject);
-            }
+            if (_inventory.HasCrowbar)
+                _playerInteractor.DoCrowbarRaycast();
+            _playerInteractor.DoDoorRaycast(_inventory.HasKey);
         }
-    }
-    private void DoDoorRaycast()
-    {
-        GameObject rayObject = RaycastFromCamera(_touchDistance, _doorsLayer);
-        if (rayObject == null) return;
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            var door = rayObject.GetComponent<Door>();
-            if (door is DoorLocked)
-            {
-                if (_inventory.HasKey)
-                    door.OpenDoor();
-            }
-            else
-                door.OpenDoor();
 
 
-        }
+
+
     }
 
     public void Init(Camera camera)
     {
         _playerRotator.Init(camera);
         _playerMover.Init(camera);
+        _playerInteractor.Init(camera);
         _camera = camera;
     }
 
     public void ReverseGravity()
     {
         if (!_canChangeGravity || !_playerMover.IsGrounded || _playerMover.moverState != PlayerMoverStates.moving) return;
+        ForceReverseGravity();
+    }
+
+    public void ForceReverseGravity()
+    {
         _playerMover.ReverseGravity();
         _playerRotator.ReverseGravity();
         _canChangeGravity = false;
+        _isUpsideDown = !_isUpsideDown;
     }
+
     public void StartClimbingLadder()
     {
         _playerMover.StartClimbingLadder();
@@ -167,16 +151,10 @@ public class Player : MonoBehaviour
         OnWaitListChanged?.Invoke(false);
     }
 
-    private GameObject RaycastFromCamera(float maxDistance, LayerMask mask)
+    public void SetToPosition(Vector3 newPosition, bool gravity)
     {
-        RaycastHit hit;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out hit, maxDistance, mask.value))
-        {
-            Transform objectHit = hit.transform;
-            return objectHit.gameObject;
-        }
-        return null;
+        _playerMover.SetNewPosition(newPosition);
+        if (gravity != _isUpsideDown) ForceReverseGravity();
     }
+
 }
