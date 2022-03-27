@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
+
 
 [RequireComponent(typeof(PlayerMover), typeof(PlayerRotator), typeof(Inventory))]
 [RequireComponent(typeof(PlayerInteractor))]
@@ -23,6 +25,8 @@ public class Player : MonoBehaviour
 
     private bool _isUpsideDown = false;
 
+    [SerializeField] private UnityEvent _onReverseGravity;
+
     private void Awake()
     {
         _playerMover = GetComponent<PlayerMover>();
@@ -41,7 +45,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && _inventory.HasGravityChanger)
+        if (Input.GetKeyDown(KeyCode.F))
             ReverseGravity();
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -50,6 +54,7 @@ public class Player : MonoBehaviour
             if (_inventory.HasCrowbar)
                 _playerInteractor.DoCrowbarRaycast();
             _playerInteractor.DoDoorRaycast(_inventory.HasKey);
+            _playerInteractor.DoButtonRaycast();
         }
 
 
@@ -69,6 +74,7 @@ public class Player : MonoBehaviour
     {
         if (!_canChangeGravity || !_playerMover.IsGrounded || _playerMover.moverState != PlayerMoverStates.moving) return;
         ForceReverseGravity();
+        _onReverseGravity?.Invoke();
     }
 
     public void ForceReverseGravity()
