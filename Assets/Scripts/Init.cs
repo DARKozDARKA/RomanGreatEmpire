@@ -24,6 +24,7 @@ public class Init : MonoBehaviour
     private void Start()
     {
         _player.Init(_camera);
+        SavePointManager.Instance.Init(_player);
 
         var list = _jsonManager.ReadFromFile();
         if (list != null)

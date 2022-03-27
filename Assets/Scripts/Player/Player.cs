@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     public Action OnItemAddedInWaitList;
     public Action<bool> OnWaitListChanged;
 
-
+    private bool _isUpsideDown = false;
 
     private void Awake()
     {
@@ -68,10 +68,17 @@ public class Player : MonoBehaviour
     public void ReverseGravity()
     {
         if (!_canChangeGravity || !_playerMover.IsGrounded || _playerMover.moverState != PlayerMoverStates.moving) return;
+        ForceReverseGravity();
+    }
+
+    public void ForceReverseGravity()
+    {
         _playerMover.ReverseGravity();
         _playerRotator.ReverseGravity();
         _canChangeGravity = false;
+        _isUpsideDown = !_isUpsideDown;
     }
+
     public void StartClimbingLadder()
     {
         _playerMover.StartClimbingLadder();
@@ -144,5 +151,10 @@ public class Player : MonoBehaviour
         OnWaitListChanged?.Invoke(false);
     }
 
+    public void SetToPosition(Vector3 newPosition, bool gravity)
+    {
+        _playerMover.SetNewPosition(newPosition);
+        if (gravity != _isUpsideDown) ForceReverseGravity();
+    }
 
 }

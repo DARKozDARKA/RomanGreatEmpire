@@ -167,6 +167,14 @@ public class PlayerMover : MonoBehaviour
         if (_playerState == PlayerMoverStates.changingGravity)
             _playerState = PlayerMoverStates.moving;
     }
+
+    public void SetNewPosition(Vector3 newPosition)
+    {
+        _controller.enabled = false;
+        transform.position = newPosition;
+        _controller.enabled = true;
+
+    }
 }
 
 public enum PlayerMoverStates
