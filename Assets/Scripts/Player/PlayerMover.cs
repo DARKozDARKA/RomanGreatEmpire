@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMover : MonoBehaviour
@@ -12,6 +13,10 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float _groundDistance;
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private float _climbingLadderSpeed = 3f;
+
+    [SerializeField] private UnityEvent _onJump;
+    [SerializeField] private UnityEvent _onTrampoline;
+
 
     private PlayerMoverStates _playerState = PlayerMoverStates.moving;
     private CharacterController _controller;
@@ -28,6 +33,7 @@ public class PlayerMover : MonoBehaviour
 
     private Vector2 _oldInputAxis;
     private Vector2 _currentInputAxis = new Vector2(0, 0);
+
     private Vector2 GetInputAxis()
     {
         _currentInputAxis = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -106,6 +112,7 @@ public class PlayerMover : MonoBehaviour
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight * -2f * _gravity * UpsideDownMultiplier) * UpsideDownMultiplier;
+            _onJump?.Invoke();
         }
         ApplyGravity();
     }
@@ -143,6 +150,7 @@ public class PlayerMover : MonoBehaviour
         _playerState = PlayerMoverStates.changingGravity;
         StartCoroutine(SetGravityChange());
 
+
     }
 
     private void CheckingIfIsGrounded()
@@ -166,6 +174,7 @@ public class PlayerMover : MonoBehaviour
         _velocity *= -1;
         if (_playerState == PlayerMoverStates.changingGravity)
             _playerState = PlayerMoverStates.moving;
+        _onTrampoline?.Invoke();
     }
 
     public void SetNewPosition(Vector3 newPosition)
