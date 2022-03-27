@@ -200,7 +200,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5417320739718649096}
-  - component: {fileID: 1286943781346528210}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -224,22 +223,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1286943781346528210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4640361480053133234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1875890cdf6d3f45b252dacd4e9fe37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _platformObject: {fileID: 0}
-  _normalScale: 1
-  _activeTime: 5
-  _appearSpeed: 1
 --- !u!1 &6109498430483430022
 GameObject:
   m_ObjectHideFlags: 0
