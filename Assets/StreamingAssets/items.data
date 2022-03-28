@@ -1,8 +1,7 @@
 {
     "filename": "items",
     "names": [
-        "GravityChanger",
-        "Crowbar",
-        "Key"
+        "Key",
+        "Crowbar"
     ]
 }
