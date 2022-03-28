@@ -8,6 +8,7 @@ public class Init : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private JSONManager _jsonManager;
     [SerializeField] private UIManager _UIManager;
+    [SerializeField] private bool _firstLevel = false;
 
     private void OnEnable()
     {
@@ -26,6 +27,11 @@ public class Init : MonoBehaviour
         _player.Init(_camera);
         SavePointManager.Instance.Init(_player);
 
+        if (_firstLevel)
+        {
+            _player.CleanInventory();
+            return;
+        }
         var list = _jsonManager.ReadFromFile();
         if (list != null)
             _player.SetInvetory(list);
