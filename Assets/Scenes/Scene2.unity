@@ -26276,6 +26276,7 @@ MonoBehaviour:
   _player: {fileID: 1677925342}
   _jsonManager: {fileID: 814843842}
   _UIManager: {fileID: 521904779}
+  _firstLevel: 0
 --- !u!4 &1727092742
 Transform:
   m_ObjectHideFlags: 0
@@ -26684,7 +26685,8 @@ AudioSource:
   m_GameObject: {fileID: 1807707451}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: d141ad6b057069f4db6003b174ff4718,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.3
@@ -27913,7 +27915,8 @@ AudioSource:
   m_GameObject: {fileID: 1975021428}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: d141ad6b057069f4db6003b174ff4718,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 01db25772ca5a254ca934a599a23cb37, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
