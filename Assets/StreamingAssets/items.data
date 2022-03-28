@@ -1,4 +1,7 @@
 {
     "filename": "items",
-    "names": []
+    "names": [
+        "Key",
+        "Crowbar"
+    ]
 }
